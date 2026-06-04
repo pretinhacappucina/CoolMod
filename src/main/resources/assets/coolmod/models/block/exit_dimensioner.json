@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "coolmod:block/exit_dimensioner_top",
+    "bottom": "coolmod:block/exit_dimensioner_bottom",
+    "side": "coolmod:block/exit_dimensioner_side"
+  }
+}

@@ -1,21 +1,37 @@
 package pretinha;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.server.network.ServerPlayerEntity;
-import pretinha.util.SpawnUtil;
+import net.minecraft.block.Blocks;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 
 public class SpawnManager {
 
-    public static void register() {
+    public static BlockPos findSpawn(ServerWorld world, int centerX, int centerZ) {
 
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+        // posição fixa obrigatória
+        int x = 0;
+        int z = 0;
+        int y = 90;
 
-            ServerPlayerEntity player = handler.getPlayer();
+        BlockPos pos = new BlockPos(x, y, z);
 
-            server.execute(() -> {
-                SpawnUtil.teleport(player);
-            });
+        // evita cair dentro de bloco sólido ou bedrock
+        if (world.getBlockState(pos).isSolidBlock(world, pos)
+                || world.getBlockState(pos).isOf(Blocks.BEDROCK)) {
 
-        });
+            // sobe até achar ar livre (sem “garantir segurança”, só evitar bug)
+            for (int i = 90; i < world.getTopY(); i++) {
+
+                BlockPos test = new BlockPos(x, i, z);
+
+                if (!world.getBlockState(test).isSolidBlock(world, test)
+                        && !world.getBlockState(test).isOf(Blocks.BEDROCK)) {
+                    return test;
+                }
+            }
+        }
+
+        // padrão absoluto
+        return pos;
     }
 }

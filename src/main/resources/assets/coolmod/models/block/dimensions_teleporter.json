@@ -1,6 +1,8 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "coolmod:block/dimensions_teleporter"
+    "top": "coolmod:block/dimensions_teleporter_top",
+    "bottom": "coolmod:block/dimensions_teleporter_bottom",
+    "side": "coolmod:block/dimensions_teleporter_side"
   }
 }

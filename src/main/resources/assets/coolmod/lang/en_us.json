@@ -2,5 +2,11 @@
   "block.coolmod.black_bedrock": "Black Bedrock",
   "block.coolmod.dimensions_teleporter": "Dimensions Teleporter",
   "item.coolmod.dimensional_reactiver": "Dimensional Reactiver",
-  "block.coolmod.golden_bedrock": "Golden Bedrock"
+  "block.coolmod.golden_bedrock": "Golden Bedrock",
+  "block.coolmod.exit_dimensioner": "Exit Dimensioner",
+  "block.coolmod.bedrock_iluminer": "Bedrock Iluminer",
+  "item.coolmod.parkour_reactiver": "Parkour Reactiver",
+  "block.coolmod.diamond_bedrock": "Diamond Bedrock",
+  "block.coolmod.xp_transformer": "XP Transformer",
+  "block.coolmod.spawn_bedrock": "Spawner Bedrock"
 }
