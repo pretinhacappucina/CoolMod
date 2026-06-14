@@ -6,9 +6,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import pretinha.DimensionRunManager;
+import pretinha.JumpManager;
 import pretinha.ModDimensions;
 import pretinha.SpawnManager;
+import pretinha.SpeedManager;
+import pretinha.StrengthManager;
 
 @Mixin(ServerPlayerEntity.class)
 public class PlayerJoinMixin {
@@ -16,12 +20,15 @@ public class PlayerJoinMixin {
     @Inject(method = "onSpawn", at = @At("TAIL"))
     private void onSpawn(CallbackInfo ci) {
 
-        ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
 
         ServerWorld world = player.getServer().getWorld(ModDimensions.DIMENSIONAL_BARRIERS);
         if (world == null) return;
 
         DimensionRunManager.create(player.getUuid());
+        JumpManager.create(player.getUuid());
+        SpeedManager.create(player.getUuid());
+        StrengthManager.create(player.getUuid());
 
         var run = DimensionRunManager.get(player.getUuid());
 

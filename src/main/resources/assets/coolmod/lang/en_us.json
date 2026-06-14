@@ -11,5 +11,10 @@
   "block.coolmod.spawn_bedrock": "Spawner Bedrock",
   "block.coolmod.inventory_cleaner": "Inventory Cleaner",
   "block.coolmod.xp_dropper": "XP Dropper",
-  "block.coolmod.emerald_bedrock": "Emerald Bedrock"
+  "block.coolmod.emerald_bedrock": "Emerald Bedrock",
+  "item.coolmod.speedrun_reactiver": "Speedrun Reactiver",
+  "block.coolmod.jump_of_infinity": "Jump of Infinity",
+  "block.coolmod.speed_of_infinity": "Speed of Infinity,",
+  "item.coolmod.stronger_reactiver": "Stronger Reactiver",
+  "block.coolmod.strong_of_infinity": "Strong Of Infinity"
 }

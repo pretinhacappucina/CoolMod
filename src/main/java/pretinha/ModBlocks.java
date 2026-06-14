@@ -16,7 +16,8 @@ public class ModBlocks {
 
     public static final Block BLACK_BEDROCK =
             registerBlackBedrock("black_bedrock");
-
+    public static final Block JUMP_OF_INFINITY =
+            registerJumpOfInfinity("jump_of_infinity");
     public static final Block DIMENSIONS_TELEPORTER =
             register("dimensions_teleporter");
 
@@ -43,6 +44,10 @@ public class ModBlocks {
             registerXPDropper("xp_dropper");
     public static final Block EMERALD_BEDROCK =
             registerEmeraldBedrock("emerald_bedrock");
+    public static final Block SPEED_OF_INFINITY =
+            registerSpeedOfInfinity("speed_of_infinity");
+    public static final Block STRONG_OF_INFINITY =
+            registerStrongOfInfinity("strong_of_infinity");
 
 
 
@@ -51,6 +56,63 @@ public class ModBlocks {
         Identifier id = Identifier.of(Coolmod.MOD_ID, name);
 
         Block block = new Block(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
+    private static Block registerStrongOfInfinity(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new StrongOfInfinityBlock(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
+    private static Block registerJumpOfInfinity(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new JumpOfInfinityBlock(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
+    private static Block registerSpeedOfInfinity(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new SpeedOfInfinityBlock(
                 AbstractBlock.Settings.copy(Blocks.BEDROCK)
                         .strength(-1.0F, 3600000.0F)
         );
@@ -273,6 +335,9 @@ public class ModBlocks {
                     entries.add(INVENTORY_CLEANER);
                     entries.add(XP_DROPPER);
                     entries.add(EMERALD_BEDROCK);
+                    entries.add(JUMP_OF_INFINITY);
+                    entries.add(SPEED_OF_INFINITY);
+                    entries.add(STRONG_OF_INFINITY);
                 });
 
         Coolmod.LOGGER.info("Blocks registrados!");
