@@ -8,5 +8,8 @@
   "item.coolmod.parkour_reactiver": "Parkour Reactiver",
   "block.coolmod.diamond_bedrock": "Diamond Bedrock",
   "block.coolmod.xp_transformer": "XP Transformer",
-  "block.coolmod.spawn_bedrock": "Spawner Bedrock"
+  "block.coolmod.spawn_bedrock": "Spawner Bedrock",
+  "block.coolmod.inventory_cleaner": "Inventory Cleaner",
+  "block.coolmod.xp_dropper": "XP Dropper",
+  "block.coolmod.emerald_bedrock": "Emerald Bedrock"
 }

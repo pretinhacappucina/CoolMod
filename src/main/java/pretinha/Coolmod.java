@@ -16,6 +16,7 @@ public class Coolmod implements ModInitializer {
         ModItems.register();
         ModBlocks.register();
         DimensionalReactivatorHandler.register();
+
         // 🔥 registra teleport system (1 vez só)
         DimensionTeleportHandler.register();
 
@@ -24,6 +25,7 @@ public class Coolmod implements ModInitializer {
             server.getPlayerManager().getPlayerList()
                     .forEach(ExitDimensionerBlock::tick);
         });
+
         LOGGER.info("Coolmod inicializado com sucesso!");
     }
 }

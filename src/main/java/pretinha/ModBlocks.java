@@ -37,6 +37,12 @@ public class ModBlocks {
 
     public static final Block XP_TRANSFORMER =
             registerXPTransformer("xp_transformer");
+    public static final Block INVENTORY_CLEANER =
+            registerInventoryCleaner("inventory_cleaner");
+    public static final Block XP_DROPPER =
+            registerXPDropper("xp_dropper");
+    public static final Block EMERALD_BEDROCK =
+            registerEmeraldBedrock("emerald_bedrock");
 
 
 
@@ -59,7 +65,45 @@ public class ModBlocks {
 
         return block;
     }
+    private static Block registerInventoryCleaner(String name) {
 
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new InventoryCleanerBlock(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
+    private static Block registerEmeraldBedrock(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new EmeraldBedrockBlock(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+                        .luminance(state -> 6)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
 
 
     private static Block registerXPTransformer(String name) {
@@ -81,7 +125,25 @@ public class ModBlocks {
 
         return block;
     }
+    private static Block registerXPDropper(String name) {
 
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new XPDropperBlock(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
 
 
     private static Block registerBlackBedrock(String name) {
@@ -208,6 +270,9 @@ public class ModBlocks {
                     entries.add(SPAWN_BEDROCK);
                     entries.add(DIAMOND_BEDROCK);
                     entries.add(XP_TRANSFORMER);
+                    entries.add(INVENTORY_CLEANER);
+                    entries.add(XP_DROPPER);
+                    entries.add(EMERALD_BEDROCK);
                 });
 
         Coolmod.LOGGER.info("Blocks registrados!");

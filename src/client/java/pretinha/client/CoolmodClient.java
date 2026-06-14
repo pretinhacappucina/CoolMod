@@ -2,7 +2,7 @@ package pretinha.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
+
 import pretinha.WarpState;
 
 public class CoolmodClient implements ClientModInitializer {
@@ -10,8 +10,10 @@ public class CoolmodClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 
+		// HUD do warp
 		WarpHud.register();
 
+		// Tick do HUD
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 
 			if (client.player == null) return;

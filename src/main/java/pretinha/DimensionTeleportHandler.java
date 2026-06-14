@@ -97,6 +97,25 @@ public class DimensionTeleportHandler {
                         player.getPitch()
                 );
 
+                // ✔ CHAMADA CORRETA (cluster system)
+                StructureSpawner.spawnCluster(target, safe);
+
+                BlockPos last = LeavefoltManager.LEAVEFOLTS.get(
+                        LeavefoltManager.LEAVEFOLTS.size() - 1
+                );
+
+                player.sendMessage(
+                        net.minecraft.text.Text.literal(
+                                "Leavefolt: "
+                                        + last.getX()
+                                        + " "
+                                        + last.getY()
+                                        + " "
+                                        + last.getZ()
+                        ),
+                        false
+                );
+
                 countdown.remove(id);
                 timer.remove(id);
 
@@ -129,6 +148,7 @@ public class DimensionTeleportHandler {
                     for (int i = y; i >= minY; i--) {
 
                         BlockPos pos = new BlockPos(checkX, i, checkZ);
+
                         BlockPos above1 = pos.up();
                         BlockPos above2 = pos.up(2);
 
@@ -143,14 +163,10 @@ public class DimensionTeleportHandler {
                                         || block == Blocks.SCULK_SHRIEKER
                                         || block == Blocks.SCULK_VEIN;
 
-                        if (!validFloor) {
-                            continue;
-                        }
+                        if (!validFloor) continue;
 
-                        boolean air1 = world.getBlockState(above1).isAir();
-                        boolean air2 = world.getBlockState(above2).isAir();
-
-                        if (air1 && air2) {
+                        if (world.getBlockState(above1).isAir()
+                                && world.getBlockState(above2).isAir()) {
                             return above1;
                         }
                     }
