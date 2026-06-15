@@ -13,6 +13,9 @@ import pretinha.ModDimensions;
 import pretinha.SpawnManager;
 import pretinha.SpeedManager;
 import pretinha.StrengthManager;
+import pretinha.FallDamageManager;
+import pretinha.RegenerationManager;
+import pretinha.MiningManager;
 
 @Mixin(ServerPlayerEntity.class)
 public class PlayerJoinMixin {
@@ -29,6 +32,10 @@ public class PlayerJoinMixin {
         JumpManager.create(player.getUuid());
         SpeedManager.create(player.getUuid());
         StrengthManager.create(player.getUuid());
+        FallDamageManager.create(player.getUuid());
+        RegenerationManager.create(player.getUuid());
+        RegenerationManager.create(player.getUuid());
+        MiningManager.create(player.getUuid());
 
         var run = DimensionRunManager.get(player.getUuid());
 

@@ -14,7 +14,12 @@
   "block.coolmod.emerald_bedrock": "Emerald Bedrock",
   "item.coolmod.speedrun_reactiver": "Speedrun Reactiver",
   "block.coolmod.jump_of_infinity": "Jump of Infinity",
-  "block.coolmod.speed_of_infinity": "Speed of Infinity,",
+  "block.coolmod.speed_of_infinity": "Speed of Infinity",
   "item.coolmod.stronger_reactiver": "Stronger Reactiver",
-  "block.coolmod.strong_of_infinity": "Strong Of Infinity"
+  "block.coolmod.strong_of_infinity": "Strong Of Infinity",
+  "item.coolmod.regeneration_reactiver": "Regeneration Reactiver",
+  "block.coolmod.regeneration_of_infinity": "Regeneration Of Infinity",
+  "item.coolmod.miner_reactiver": "Miner Reactiver",
+  "block.coolmod.mine_of_infinity": "Mine Of Infinity",
+  "block.coolmod.dimensional_fireflies": "Dimensional Fireflies"
 }

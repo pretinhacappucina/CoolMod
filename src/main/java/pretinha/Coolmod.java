@@ -25,6 +25,25 @@ public class Coolmod implements ModInitializer {
 
             server.getPlayerManager().getPlayerList().forEach(player -> {
 
+                if (FallDamageManager.has(player.getUuid())) {
+                    player.fallDistance = 0;
+                }
+
+                int regenLevel = RegenerationManager.get(player.getUuid());
+
+                if (regenLevel > 0) {
+                    player.addStatusEffect(
+                            new StatusEffectInstance(
+                                    StatusEffects.REGENERATION,
+                                    40,
+                                    regenLevel - 1,
+                                    true,
+                                    false,
+                                    false
+                            )
+                    );
+                }
+
                 int speedLevel = SpeedManager.get(player.getUuid());
 
                 if (speedLevel > 0) {
@@ -39,15 +58,29 @@ public class Coolmod implements ModInitializer {
                             )
                     );
                 }
+
                 int strengthLevel = StrengthManager.get(player.getUuid());
 
                 if (strengthLevel > 0) {
-
                     player.addStatusEffect(
                             new StatusEffectInstance(
                                     StatusEffects.STRENGTH,
                                     40,
                                     strengthLevel - 1,
+                                    true,
+                                    false,
+                                    false
+                            )
+                    );
+                }
+                int miningLevel = MiningManager.get(player.getUuid());
+
+                if (miningLevel > 0) {
+                    player.addStatusEffect(
+                            new StatusEffectInstance(
+                                    StatusEffects.HASTE,
+                                    40,
+                                    miningLevel - 1,
                                     true,
                                     false,
                                     false

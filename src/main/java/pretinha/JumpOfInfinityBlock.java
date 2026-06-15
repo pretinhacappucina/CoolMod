@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
@@ -26,6 +27,25 @@ public class JumpOfInfinityBlock extends Block {
 
         ItemStack stack = player.getMainHandStack();
 
+        if (stack.isOf(Items.FEATHER)) {
+
+            if (!world.isClient) {
+
+                FallDamageManager.enable(player.getUuid());
+
+                player.sendMessage(
+                        Text.literal("Feather Falling Ativacted"),
+                        true
+                );
+
+                if (!player.isCreative()) {
+                    stack.decrement(1);
+                }
+            }
+
+            return ActionResult.SUCCESS;
+        }
+
         if (stack.isOf(ModItems.PARKOUR_REACTIVER)) {
 
             if (!world.isClient) {
@@ -34,9 +54,9 @@ public class JumpOfInfinityBlock extends Block {
 
                 player.sendMessage(
                         Text.literal(
-                                "Altura extra de pulo: "
+                                "Extras Jumps: "
                                         + JumpManager.get(player.getUuid())
-                                        + " bloco(s)"
+                                        + " block(s)"
                         ),
                         true
                 );

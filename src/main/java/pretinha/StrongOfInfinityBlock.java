@@ -35,7 +35,7 @@ public class StrongOfInfinityBlock extends Block {
 
                 player.sendMessage(
                         Text.literal(
-                                "Força extra: "
+                                "Extra Strength: "
                                         + StrengthManager.get(player.getUuid())
                         ),
                         true

@@ -10,9 +10,9 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class SpeedOfInfinityBlock extends Block {
+public class RegenerationOfInfinityBlock extends Block {
 
-    public SpeedOfInfinityBlock(Settings settings) {
+    public RegenerationOfInfinityBlock(Settings settings) {
         super(settings);
     }
 
@@ -27,16 +27,16 @@ public class SpeedOfInfinityBlock extends Block {
 
         ItemStack stack = player.getMainHandStack();
 
-        if (stack.isOf(ModItems.SPEEDRUN_REACTIVER)) {
+        if (stack.isOf(ModItems.REGENERATION_REACTIVER)) {
 
             if (!world.isClient) {
 
-                SpeedManager.add(player.getUuid());
+                RegenerationManager.add(player.getUuid());
 
                 player.sendMessage(
                         Text.literal(
-                                "Extra Speed: "
-                                        + SpeedManager.get(player.getUuid())
+                                "Extra Regeneration: "
+                                        + RegenerationManager.get(player.getUuid())
                         ),
                         true
                 );

@@ -48,6 +48,12 @@ public class ModBlocks {
             registerSpeedOfInfinity("speed_of_infinity");
     public static final Block STRONG_OF_INFINITY =
             registerStrongOfInfinity("strong_of_infinity");
+    public static final Block REGENERATION_OF_INFINITY =
+            registerRegenerationOfInfinity("regeneration_of_infinity");
+    public static final Block MINE_OF_INFINITY =
+            registerMineOfInfinity("mine_of_infinity");
+    public static final Block DIMENSIONAL_FIREFLIES =
+            registerDimensionalFireflies("dimensional_fireflies");
 
 
 
@@ -75,6 +81,63 @@ public class ModBlocks {
         Identifier id = Identifier.of(Coolmod.MOD_ID, name);
 
         Block block = new StrongOfInfinityBlock(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
+    private static Block registerDimensionalFireflies(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new DimensionalFirefliesBlock(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
+    private static Block registerRegenerationOfInfinity(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new RegenerationOfInfinityBlock(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
+    private static Block registerMineOfInfinity(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new MineOfInfinityBlock(
                 AbstractBlock.Settings.copy(Blocks.BEDROCK)
                         .strength(-1.0F, 3600000.0F)
         );
@@ -338,6 +401,9 @@ public class ModBlocks {
                     entries.add(JUMP_OF_INFINITY);
                     entries.add(SPEED_OF_INFINITY);
                     entries.add(STRONG_OF_INFINITY);
+                    entries.add(REGENERATION_OF_INFINITY);
+                    entries.add(MINE_OF_INFINITY);
+                    entries.add(DIMENSIONAL_FIREFLIES);
                 });
 
         Coolmod.LOGGER.info("Blocks registrados!");

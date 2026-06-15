@@ -18,6 +18,10 @@ public class ModItems {
             register("speedrun_reactiver");
     public static final Item STRONGER_REACTIVER =
             register("stronger_reactiver");
+    public static final Item REGENERATION_REACTIVER =
+            register("regeneration_reactiver");
+    public static final Item MINER_REACTIVER =
+            register("miner_reactiver");
 
     private static Item register(String name) {
         Item item = new Item(new Item.Settings());
@@ -39,6 +43,8 @@ public class ModItems {
                     entries.add(DIMENSIONAL_REACTIVER);
                     entries.add(SPEEDRUN_REACTIVER);
                     entries.add(STRONGER_REACTIVER);
+                    entries.add(REGENERATION_REACTIVER);
+                    entries.add(MINER_REACTIVER);
                 });
 
         Coolmod.LOGGER.info("Items registrados");
