@@ -10,6 +10,8 @@ import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.block.ExperienceDroppingBlock;
+import net.minecraft.util.math.intprovider.ConstantIntProvider;
 
 public class ModBlocks {
 
@@ -54,6 +56,8 @@ public class ModBlocks {
             registerMineOfInfinity("mine_of_infinity");
     public static final Block DIMENSIONAL_FIREFLIES =
             registerDimensionalFireflies("dimensional_fireflies");
+    public static final Block DIMENSIONAL_ORE =
+            registerDimensionalOre("dimensional_ore");
 
 
 
@@ -64,6 +68,26 @@ public class ModBlocks {
         Block block = new Block(
                 AbstractBlock.Settings.copy(Blocks.BEDROCK)
                         .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
+    private static Block registerDimensionalOre(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new ExperienceDroppingBlock(
+                ConstantIntProvider.create(3),
+                AbstractBlock.Settings.copy(Blocks.ANCIENT_DEBRIS)
+                        .requiresTool()
         );
 
         Registry.register(Registries.BLOCK, id, block);
@@ -404,6 +428,7 @@ public class ModBlocks {
                     entries.add(REGENERATION_OF_INFINITY);
                     entries.add(MINE_OF_INFINITY);
                     entries.add(DIMENSIONAL_FIREFLIES);
+                    entries.add(DIMENSIONAL_ORE);
                 });
 
         Coolmod.LOGGER.info("Blocks registrados!");

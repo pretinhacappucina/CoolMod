@@ -45,6 +45,40 @@ public class EmeraldBedrockBlock extends Block {
             return ActionResult.SUCCESS;
         }
 
+        if (stack.isOf(Items.GOLD_INGOT)) {
+
+            if (!world.isClient) {
+
+                world.setBlockState(
+                        pos,
+                        ModBlocks.GOLDEN_BEDROCK.getDefaultState()
+                );
+
+                if (!player.isCreative()) {
+                    stack.decrement(1);
+                }
+            }
+
+            return ActionResult.SUCCESS;
+        }
+
+        if (stack.isOf(Items.DIAMOND)) {
+
+            if (!world.isClient) {
+
+                world.setBlockState(
+                        pos,
+                        ModBlocks.DIAMOND_BEDROCK.getDefaultState()
+                );
+
+                if (!player.isCreative()) {
+                    stack.decrement(1);
+                }
+            }
+
+            return ActionResult.SUCCESS;
+        }
+
         return ActionResult.PASS;
     }
 }

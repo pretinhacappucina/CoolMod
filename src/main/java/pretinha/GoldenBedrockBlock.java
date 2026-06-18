@@ -45,6 +45,23 @@ public class GoldenBedrockBlock extends Block {
             return ActionResult.SUCCESS;
         }
 
-        return ActionResult.FAIL;
+        if (stack.isOf(Items.EMERALD)) {
+
+            if (!world.isClient) {
+
+                world.setBlockState(
+                        pos,
+                        ModBlocks.EMERALD_BEDROCK.getDefaultState()
+                );
+
+                if (!player.isCreative()) {
+                    stack.decrement(1);
+                }
+            }
+
+            return ActionResult.SUCCESS;
+        }
+
+        return ActionResult.PASS;
     }
 }

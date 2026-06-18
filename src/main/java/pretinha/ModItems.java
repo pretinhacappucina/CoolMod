@@ -22,6 +22,8 @@ public class ModItems {
             register("regeneration_reactiver");
     public static final Item MINER_REACTIVER =
             register("miner_reactiver");
+    public static final Item DIMENSIONAL_DUST =
+            register("dimensional_dust");
 
     private static Item register(String name) {
         Item item = new Item(new Item.Settings());
@@ -45,6 +47,7 @@ public class ModItems {
                     entries.add(STRONGER_REACTIVER);
                     entries.add(REGENERATION_REACTIVER);
                     entries.add(MINER_REACTIVER);
+                    entries.add(DIMENSIONAL_DUST);
                 });
 
         Coolmod.LOGGER.info("Items registrados");

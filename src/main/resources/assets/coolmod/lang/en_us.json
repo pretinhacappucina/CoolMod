@@ -21,5 +21,7 @@
   "block.coolmod.regeneration_of_infinity": "Regeneration Of Infinity",
   "item.coolmod.miner_reactiver": "Miner Reactiver",
   "block.coolmod.mine_of_infinity": "Mine Of Infinity",
-  "block.coolmod.dimensional_fireflies": "Dimensional Fireflies"
+  "block.coolmod.dimensional_fireflies": "Dimensional Fireflies",
+  "block.coolmod.dimensional_ore": "Dimensional Ore",
+  "item.coolmod.dimensional_dust": "Dimensional Dust"
 }
