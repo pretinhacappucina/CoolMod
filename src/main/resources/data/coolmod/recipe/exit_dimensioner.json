@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DPD",
+    "SMT",
+    "DRD"
+  ],
+  "key": {
+    "D": {
+      "item": "coolmod:dimensional_dust"
+    },
+    "P": {
+      "item": "coolmod:parkour_reactiver"
+    },
+    "S": {
+      "item": "coolmod:speedrun_reactiver"
+    },
+    "M": {
+      "item": "coolmod:miner_reactiver"
+    },
+    "T": {
+      "item": "coolmod:stronger_reactiver"
+    },
+    "R": {
+      "item": "coolmod:regeneration_reactiver"
+    }
+  },
+  "result": {
+    "id": "coolmod:exit_dimensioner",
+    "count": 1
+  }
+}

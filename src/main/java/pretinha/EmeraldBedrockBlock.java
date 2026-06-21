@@ -78,7 +78,22 @@ public class EmeraldBedrockBlock extends Block {
 
             return ActionResult.SUCCESS;
         }
+        if (stack.isOf(ModItems.DIMENSIONAL_DUST)) {
 
+            if (!world.isClient) {
+
+                world.setBlockState(
+                        pos,
+                        ModBlocks.DIMENSIONAL_BEDROCK.getDefaultState()
+                );
+
+                if (!player.isCreative()) {
+                    stack.decrement(1);
+                }
+            }
+
+            return ActionResult.SUCCESS;
+        }
         return ActionResult.PASS;
     }
 }

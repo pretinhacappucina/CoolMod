@@ -23,5 +23,8 @@
   "block.coolmod.mine_of_infinity": "Mine Of Infinity",
   "block.coolmod.dimensional_fireflies": "Dimensional Fireflies",
   "block.coolmod.dimensional_ore": "Dimensional Ore",
-  "item.coolmod.dimensional_dust": "Dimensional Dust"
+  "item.coolmod.dimensional_dust": "Dimensional Dust",
+  "item.coolmod.barrier_breaker": "Barrier Breaker",
+  "block.coolmod.dimensional_dust_block": "Dimensional Dust Block",
+  "block.coolmod.dimensional_bedrock": "Dimensional Bedrock"
 }

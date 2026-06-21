@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    "DAD",
+    "DDD"
+  ],
+  "key": {
+    "D": {
+      "item": "coolmod:dimensional_dust"
+    },
+    "A": {
+      "item": "minecraft:sugar"
+    }
+  },
+  "result": {
+    "id": "coolmod:speed_of_infinity",
+    "count": 1
+  }
+}

@@ -6,6 +6,8 @@ import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.ToolMaterials;
 
 public class ModItems {
 
@@ -25,6 +27,7 @@ public class ModItems {
     public static final Item DIMENSIONAL_DUST =
             register("dimensional_dust");
 
+
     private static Item register(String name) {
         Item item = new Item(new Item.Settings());
 
@@ -36,6 +39,15 @@ public class ModItems {
 
         return item;
     }
+    public static final Item BARRIER_BREAKER =
+            Registry.register(
+                    Registries.ITEM,
+                    Identifier.of(Coolmod.MOD_ID, "barrier_breaker"),
+                    new BarrierBreakerItem(
+                            ToolMaterials.NETHERITE,
+                            new Item.Settings()
+                    )
+            );
 
     public static void register() {
 
@@ -48,6 +60,7 @@ public class ModItems {
                     entries.add(REGENERATION_REACTIVER);
                     entries.add(MINER_REACTIVER);
                     entries.add(DIMENSIONAL_DUST);
+                    entries.add(BARRIER_BREAKER);
                 });
 
         Coolmod.LOGGER.info("Items registrados");

@@ -58,6 +58,10 @@ public class ModBlocks {
             registerDimensionalFireflies("dimensional_fireflies");
     public static final Block DIMENSIONAL_ORE =
             registerDimensionalOre("dimensional_ore");
+    public static final Block DIMENSIONAL_DUST_BLOCK =
+            registerDimensionalDustBlock("dimensional_dust_block");
+    public static final Block DIMENSIONAL_BEDROCK =
+            registerDimensionalBedrock("dimensional_bedrock");
 
 
 
@@ -68,6 +72,26 @@ public class ModBlocks {
         Block block = new Block(
                 AbstractBlock.Settings.copy(Blocks.BEDROCK)
                         .strength(-1.0F, 3600000.0F)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
+    private static Block registerDimensionalBedrock(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new DimensionalBedrockBlock(
+                AbstractBlock.Settings.copy(Blocks.BEDROCK)
+                        .strength(-1.0F, 3600000.0F)
+                        .luminance(state -> 10)
         );
 
         Registry.register(Registries.BLOCK, id, block);
@@ -100,13 +124,32 @@ public class ModBlocks {
 
         return block;
     }
+    private static Block registerDimensionalDustBlock(String name) {
+
+        Identifier id = Identifier.of(Coolmod.MOD_ID, name);
+
+        Block block = new Block(
+                AbstractBlock.Settings.copy(Blocks.REINFORCED_DEEPSLATE)
+                        .luminance(state -> 3)
+        );
+
+        Registry.register(Registries.BLOCK, id, block);
+
+        Registry.register(
+                Registries.ITEM,
+                id,
+                new BlockItem(block, new Item.Settings())
+        );
+
+        return block;
+    }
     private static Block registerStrongOfInfinity(String name) {
 
         Identifier id = Identifier.of(Coolmod.MOD_ID, name);
 
         Block block = new StrongOfInfinityBlock(
-                AbstractBlock.Settings.copy(Blocks.BEDROCK)
-                        .strength(-1.0F, 3600000.0F)
+                AbstractBlock.Settings.copy(Blocks.OBSIDIAN)
+                        .strength(5.0F, 10.0F)
         );
 
         Registry.register(Registries.BLOCK, id, block);
@@ -143,8 +186,8 @@ public class ModBlocks {
         Identifier id = Identifier.of(Coolmod.MOD_ID, name);
 
         Block block = new RegenerationOfInfinityBlock(
-                AbstractBlock.Settings.copy(Blocks.BEDROCK)
-                        .strength(-1.0F, 3600000.0F)
+                AbstractBlock.Settings.copy(Blocks.OBSIDIAN)
+                        .strength(5.0F, 10.0F)
         );
 
         Registry.register(Registries.BLOCK, id, block);
@@ -162,8 +205,8 @@ public class ModBlocks {
         Identifier id = Identifier.of(Coolmod.MOD_ID, name);
 
         Block block = new MineOfInfinityBlock(
-                AbstractBlock.Settings.copy(Blocks.BEDROCK)
-                        .strength(-1.0F, 3600000.0F)
+                AbstractBlock.Settings.copy(Blocks.OBSIDIAN)
+                        .strength(5.0F, 10.0F)
         );
 
         Registry.register(Registries.BLOCK, id, block);
@@ -182,7 +225,7 @@ public class ModBlocks {
 
         Block block = new JumpOfInfinityBlock(
                 AbstractBlock.Settings.copy(Blocks.BEDROCK)
-                        .strength(-1.0F, 3600000.0F)
+                        .strength(5.0F, 10.0F)
         );
 
         Registry.register(Registries.BLOCK, id, block);
@@ -201,7 +244,7 @@ public class ModBlocks {
 
         Block block = new SpeedOfInfinityBlock(
                 AbstractBlock.Settings.copy(Blocks.BEDROCK)
-                        .strength(-1.0F, 3600000.0F)
+                        .strength(5.0F, 10.0F)
         );
 
         Registry.register(Registries.BLOCK, id, block);
@@ -389,8 +432,8 @@ public class ModBlocks {
         Identifier id = Identifier.of(Coolmod.MOD_ID, name);
 
         Block block = new ExitDimensionerBlock(
-                AbstractBlock.Settings.copy(Blocks.BEDROCK)
-                        .strength(-1.0F, 3600000.0F)
+                AbstractBlock.Settings.copy(Blocks.OBSIDIAN)
+                        .strength(7.0F, 20.0F)
         );
 
         Registry.register(Registries.BLOCK, id, block);
@@ -429,6 +472,8 @@ public class ModBlocks {
                     entries.add(MINE_OF_INFINITY);
                     entries.add(DIMENSIONAL_FIREFLIES);
                     entries.add(DIMENSIONAL_ORE);
+                    entries.add(DIMENSIONAL_DUST_BLOCK);
+                    entries.add(DIMENSIONAL_BEDROCK);
                 });
 
         Coolmod.LOGGER.info("Blocks registrados!");
