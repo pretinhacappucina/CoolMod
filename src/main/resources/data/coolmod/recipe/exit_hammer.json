@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DD",
+    "DS",
+    " S"
+  ],
+  "key": {
+    "D": {
+      "item": "coolmod:exit_dimensioner"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "coolmod:exit_hammer",
+    "count": 1
+  }
+}

@@ -1,28 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "DPD",
-    "SMT",
-    "DRD"
+    "FFF",
+    "FFF",
+    "FFF"
   ],
   "key": {
-    "D": {
-      "item": "coolmod:dimensional_dust"
-    },
-    "P": {
-      "item": "coolmod:parkour_reactiver"
-    },
-    "S": {
-      "item": "coolmod:speedrun_reactiver"
-    },
-    "M": {
-      "item": "coolmod:miner_reactiver"
-    },
-    "T": {
-      "item": "coolmod:stronger_reactiver"
-    },
-    "R": {
-      "item": "coolmod:regeneration_reactiver"
+    "F": {
+      "item": "coolmod:fragments_of_exit"
     }
   },
   "result": {

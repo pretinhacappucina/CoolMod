@@ -26,6 +26,8 @@ public class ModItems {
             register("miner_reactiver");
     public static final Item DIMENSIONAL_DUST =
             register("dimensional_dust");
+    public static final Item FRAGMENTS_OF_EXIT =
+            register("fragments_of_exit");
 
 
     private static Item register(String name) {
@@ -39,6 +41,15 @@ public class ModItems {
 
         return item;
     }
+    public static final Item EXIT_HAMMER =
+            Registry.register(
+                    Registries.ITEM,
+                    Identifier.of(Coolmod.MOD_ID, "exit_hammer"),
+                    new ExitHammerItem(
+                            new Item.Settings()
+                                    .maxDamage(1500)
+                    )
+            );
     public static final Item BARRIER_BREAKER =
             Registry.register(
                     Registries.ITEM,
@@ -61,6 +72,8 @@ public class ModItems {
                     entries.add(MINER_REACTIVER);
                     entries.add(DIMENSIONAL_DUST);
                     entries.add(BARRIER_BREAKER);
+                    entries.add(FRAGMENTS_OF_EXIT);
+                    entries.add(EXIT_HAMMER);
                 });
 
         Coolmod.LOGGER.info("Items registrados");

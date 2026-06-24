@@ -20,6 +20,10 @@ public class Coolmod implements ModInitializer {
 
         DimensionalReactivatorHandler.register();
         DimensionTeleportHandler.register();
+        FragmentsRewardSystem.register();
+        ModLootTables.register();
+        MobDropHandler.register();
+        OreDropHandler.register();
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
 
@@ -90,6 +94,8 @@ public class Coolmod implements ModInitializer {
                 }
 
                 ExitDimensionerBlock.tick(player);
+                ExitHammerItem.tick(player);
+
             });
 
 
