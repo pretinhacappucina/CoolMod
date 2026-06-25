@@ -1,16 +1,14 @@
 package pretinha;
 
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Heightmap;
-import net.minecraft.block.Blocks;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -19,6 +17,7 @@ public class DimensionTeleportHandler {
 
     private static final HashMap<UUID, Integer> countdown = new HashMap<>();
     private static final HashMap<UUID, Long> timer = new HashMap<>();
+    private static final HashMap<UUID, Boolean> mineTeleport = new HashMap<>();
 
     public static void register() {
 
@@ -34,7 +33,13 @@ public class DimensionTeleportHandler {
 
             ItemStack item = sp.getStackInHand(hand);
 
-            if (!item.isOf(ModItems.DIMENSIONAL_REACTIVER)) {
+            boolean overworld =
+                    item.isOf(ModItems.OVERWORLD_REACTIVER);
+
+            boolean mine =
+                    item.isOf(ModItems.MINER_REACTIVER);
+
+            if (!overworld && !mine) {
                 return ActionResult.PASS;
             }
 
@@ -48,6 +53,7 @@ public class DimensionTeleportHandler {
 
             countdown.put(id, 3);
             timer.put(id, System.currentTimeMillis());
+            mineTeleport.put(id, mine);
 
             return ActionResult.SUCCESS;
         });
@@ -69,24 +75,38 @@ public class DimensionTeleportHandler {
                 int time = countdown.get(id);
 
                 if (time > 0) {
-                    player.sendMessage(Text.literal("Teleporting in " + time), true);
+
+                    player.sendMessage(
+                            Text.literal("Teleporting in " + time),
+                            true
+                    );
+
                     countdown.put(id, time - 1);
                     continue;
                 }
 
-                ServerWorld target = server.getWorld(ModDimensions.DIMENSIONS);
+                boolean mine =
+                        mineTeleport.getOrDefault(id, false);
 
-                if (target == null) {
-                    WarpState.stop(id);
-                    return;
+                ServerWorld target;
+
+                if (mine) {
+                    target = server.getWorld(ModDimensions.MINE_DIMENSION);
+                } else {
+                    target = server.getOverworld();
                 }
 
-                int run = DimensionRunManager.get(id);
+                if (target == null) {
+                    countdown.remove(id);
+                    timer.remove(id);
+                    mineTeleport.remove(id);
+                    WarpState.stop(id);
+                    continue;
+                }
 
-                int x = run * 150000;
-                int z = run * 150000;
+                BlockPos safe = new BlockPos(0, 90, 0);
 
-                BlockPos safe = findSafeSpawn(target, x, z);
+                createSafeArea(target, safe);
 
                 player.teleport(
                         target,
@@ -97,83 +117,48 @@ public class DimensionTeleportHandler {
                         player.getPitch()
                 );
 
-                // ✔ CHAMADA CORRETA (cluster system)
-                StructureSpawner.spawnCluster(target, safe);
-
-                BlockPos last = LeavefoltManager.LEAVEFOLTS.get(
-                        LeavefoltManager.LEAVEFOLTS.size() - 1
-                );
-
-                player.sendMessage(
-                        net.minecraft.text.Text.literal(
-                                "Leavefolt: "
-                                        + last.getX()
-                                        + " "
-                                        + last.getY()
-                                        + " "
-                                        + last.getZ()
-                        ),
-                        false
-                );
-
                 countdown.remove(id);
                 timer.remove(id);
+                mineTeleport.remove(id);
 
                 WarpState.stop(id);
 
-                player.sendMessage(Text.literal("Run " + run + " started!"), true);
+                player.sendMessage(
+                        Text.literal(
+                                mine
+                                        ? "Teleported to Mine Dimension"
+                                        : "Teleported to Overworld"
+                        ),
+                        true
+                );
             }
         });
     }
 
-    private static BlockPos findSafeSpawn(ServerWorld world, int x, int z) {
+    private static void createSafeArea(
+            ServerWorld world,
+            BlockPos center
+    ) {
 
-        int minY = Math.max(world.getBottomY(), 0);
+        int x = center.getX();
+        int y = center.getY();
+        int z = center.getZ();
 
-        for (int radius = 0; radius <= 256; radius += 16) {
+        world.setBlockState(
+                new BlockPos(x, y - 1, z),
+                Blocks.COBBLESTONE.getDefaultState()
+        );
 
-            for (int dx = -radius; dx <= radius; dx += 16) {
-                for (int dz = -radius; dz <= radius; dz += 16) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                for (int dy = 0; dy <= 2; dy++) {
 
-                    int checkX = x + dx;
-                    int checkZ = z + dz;
-
-                    BlockPos surface = world.getTopPosition(
-                            Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                            new BlockPos(checkX, 0, checkZ)
+                    world.setBlockState(
+                            new BlockPos(x + dx, y + dy, z + dz),
+                            Blocks.AIR.getDefaultState()
                     );
-
-                    int y = surface.getY();
-
-                    for (int i = y; i >= minY; i--) {
-
-                        BlockPos pos = new BlockPos(checkX, i, checkZ);
-
-                        BlockPos above1 = pos.up();
-                        BlockPos above2 = pos.up(2);
-
-                        var block = world.getBlockState(pos).getBlock();
-
-                        boolean validFloor =
-                                block == Blocks.NETHERRACK
-                                        || block == Blocks.COBBLESTONE
-                                        || block == Blocks.SCULK
-                                        || block == Blocks.SCULK_CATALYST
-                                        || block == Blocks.SCULK_SENSOR
-                                        || block == Blocks.SCULK_SHRIEKER
-                                        || block == Blocks.SCULK_VEIN;
-
-                        if (!validFloor) continue;
-
-                        if (world.getBlockState(above1).isAir()
-                                && world.getBlockState(above2).isAir()) {
-                            return above1;
-                        }
-                    }
                 }
             }
         }
-
-        return new BlockPos(x, 90, z);
     }
 }

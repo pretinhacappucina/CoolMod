@@ -17,8 +17,6 @@ public class Coolmod implements ModInitializer {
 
         ModItems.register();
         ModBlocks.register();
-
-        DimensionalReactivatorHandler.register();
         DimensionTeleportHandler.register();
         FragmentsRewardSystem.register();
         ModLootTables.register();

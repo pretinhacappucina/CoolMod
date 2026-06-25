@@ -28,6 +28,8 @@ public class ModItems {
             register("dimensional_dust");
     public static final Item FRAGMENTS_OF_EXIT =
             register("fragments_of_exit");
+    public static final Item OVERWORLD_REACTIVER =
+            register("overworld_reactiver");
 
 
     private static Item register(String name) {
@@ -74,6 +76,7 @@ public class ModItems {
                     entries.add(BARRIER_BREAKER);
                     entries.add(FRAGMENTS_OF_EXIT);
                     entries.add(EXIT_HAMMER);
+                    entries.add(OVERWORLD_REACTIVER);
                 });
 
         Coolmod.LOGGER.info("Items registrados");
