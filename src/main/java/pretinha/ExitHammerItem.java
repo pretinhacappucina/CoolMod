@@ -9,6 +9,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import net.minecraft.server.world.ServerWorld;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -17,9 +18,6 @@ public class ExitHammerItem extends Item {
 
     private static final HashMap<UUID, Integer> COUNTDOWN = new HashMap<>();
     private static final HashMap<UUID, Long> TIMER = new HashMap<>();
-    private static final HashMap<UUID, Long> COOLDOWN = new HashMap<>();
-
-    private static final long COOLDOWN_TIME = 5 * 60 * 1000; // 5 minutos
 
     public ExitHammerItem(Settings settings) {
         super(settings);
@@ -28,34 +26,20 @@ public class ExitHammerItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
 
-        if (!world.isClient && player instanceof ServerPlayerEntity sp) {
-
-            UUID id = sp.getUuid();
-            long now = System.currentTimeMillis();
-
-            // COOLDOWN
-            if (COOLDOWN.containsKey(id)) {
-                long last = COOLDOWN.get(id);
-
-                if (now - last < COOLDOWN_TIME) {
-                    long left = (COOLDOWN_TIME - (now - last)) / 1000;
-
-                    player.sendMessage(
-                            Text.literal("Cooldown: " + left + "s"),
-                            true
-                    );
-
-                    return TypedActionResult.pass(player.getStackInHand(hand));
-                }
-            }
-
-            COOLDOWN.put(id, now);
-
-            // inicia warp
-            WarpState.start(id);
-            COUNTDOWN.put(id, 5);
-            TIMER.put(id, now);
+        if (world.isClient()) {
+            return TypedActionResult.pass(player.getStackInHand(hand));
         }
+
+        if (!(player instanceof ServerPlayerEntity sp)) {
+            return TypedActionResult.pass(player.getStackInHand(hand));
+        }
+
+        UUID id = sp.getUuid();
+
+        WarpState.start(id);
+
+        COUNTDOWN.put(id, 5);
+        TIMER.put(id, System.currentTimeMillis());
 
         return TypedActionResult.success(player.getStackInHand(hand));
     }
@@ -74,7 +58,6 @@ public class ExitHammerItem extends Item {
 
         int time = COUNTDOWN.get(id);
 
-        // CONTAGEM
         if (time > 0) {
 
             player.sendMessage(
@@ -86,26 +69,17 @@ public class ExitHammerItem extends Item {
             return;
         }
 
-        // FINALIZA
         COUNTDOWN.remove(id);
         TIMER.remove(id);
 
-        var target = player.getServer()
-                .getWorld(ModDimensions.DIMENSIONAL_BARRIERS);
+        ServerWorld target =
+                player.getServer().getWorld(ModDimensions.DIMENSIONAL_BARRIERS);
 
         if (target == null) {
             WarpState.stop(id);
             return;
         }
 
-        ItemStack stack = player.getMainHandStack();
-
-        if (!(stack.getItem() instanceof ExitHammerItem)) {
-            WarpState.stop(id);
-            return;
-        }
-
-        // TELEPORT
         player.teleport(
                 target,
                 0.5,
@@ -115,24 +89,10 @@ public class ExitHammerItem extends Item {
                 player.getPitch()
         );
 
-        // DANO NO PLAYER
-        player.damage(
-                player.getDamageSources().magic(),
-                6.0F
-        );
-
-        // DURABILIDADE
-        stack.damage(
-                100,
-                player,
-                PlayerEntity.getSlotForHand(player.getActiveHand())
-        );
-
         WarpState.stop(id);
 
         player.sendMessage(
-                Text.literal("Teleported!")
-                        .formatted(Formatting.GREEN, Formatting.BOLD),
+                Text.literal("Teleported!").formatted(Formatting.GREEN, Formatting.BOLD),
                 true
         );
     }

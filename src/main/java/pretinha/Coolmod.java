@@ -22,6 +22,13 @@ public class Coolmod implements ModInitializer {
         ModLootTables.register();
         MobDropHandler.register();
         OreDropHandler.register();
+        LoveDimensionHandler.register();
+        StrongerMobHandler.register();
+        ExitDimensionEffects.register();
+        MineDimensionHandler.register();
+        ParkourIslandGen.register();
+        ParkourDimensionEffects.register();
+        SpeedrunDimensionEffects.register();
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
 

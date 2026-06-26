@@ -1,14 +1,12 @@
 package pretinha;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.Blocks;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.TypedActionResult;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -17,35 +15,33 @@ public class DimensionTeleportHandler {
 
     private static final HashMap<UUID, Integer> countdown = new HashMap<>();
     private static final HashMap<UUID, Long> timer = new HashMap<>();
+
     private static final HashMap<UUID, Boolean> mineTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> exitTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> strongerTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> loveTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> parkourTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> speedrunTeleport = new HashMap<>();
 
     public static void register() {
 
-        UseBlockCallback.EVENT.register((player, world, hand, hit) -> {
+        UseItemCallback.EVENT.register((player, world, hand) -> {
 
-            if (world.isClient()) return ActionResult.PASS;
-            if (!(player instanceof ServerPlayerEntity sp)) return ActionResult.PASS;
-
-            if (!world.getBlockState(hit.getBlockPos())
-                    .isOf(ModBlocks.DIMENSIONS_TELEPORTER)) {
-                return ActionResult.PASS;
-            }
+            if (world.isClient()) return TypedActionResult.pass(player.getStackInHand(hand));
+            if (!(player instanceof ServerPlayerEntity sp)) return TypedActionResult.pass(player.getStackInHand(hand));
 
             ItemStack item = sp.getStackInHand(hand);
 
-            boolean overworld =
-                    item.isOf(ModItems.OVERWORLD_REACTIVER);
+            boolean valid =
+                    item.getItem() == ModItems.OVERWORLD_REACTIVER ||
+                            item.getItem() == ModItems.MINER_REACTIVER ||
+                            item.getItem() == ModItems.EXIT_REACTIVER ||
+                            item.getItem() == ModItems.STRONGER_REACTIVER ||
+                            item.getItem() == ModItems.REGENERATION_REACTIVER ||
+                            item.getItem() == ModItems.PARKOUR_REACTIVER ||
+                            item.getItem() == ModItems.SPEEDRUN_REACTIVER;
 
-            boolean mine =
-                    item.isOf(ModItems.MINER_REACTIVER);
-
-            if (!overworld && !mine) {
-                return ActionResult.PASS;
-            }
-
-            if (!sp.isCreative()) {
-                item.decrement(1);
-            }
+            if (!valid) return TypedActionResult.pass(item);
 
             UUID id = sp.getUuid();
 
@@ -53,9 +49,18 @@ public class DimensionTeleportHandler {
 
             countdown.put(id, 3);
             timer.put(id, System.currentTimeMillis());
-            mineTeleport.put(id, mine);
 
-            return ActionResult.SUCCESS;
+            mineTeleport.put(id, item.getItem() == ModItems.MINER_REACTIVER);
+            exitTeleport.put(id, item.getItem() == ModItems.EXIT_REACTIVER);
+            strongerTeleport.put(id, item.getItem() == ModItems.STRONGER_REACTIVER);
+            loveTeleport.put(id, item.getItem() == ModItems.REGENERATION_REACTIVER);
+            parkourTeleport.put(id, item.getItem() == ModItems.PARKOUR_REACTIVER);
+            speedrunTeleport.put(id, item.getItem() == ModItems.SPEEDRUN_REACTIVER);
+
+            // 🔥 ISSO AQUI FAZ O ITEM SER CONSUMIDO DE VERDADE
+            item.decrement(1);
+
+            return TypedActionResult.success(item);
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
@@ -75,90 +80,75 @@ public class DimensionTeleportHandler {
                 int time = countdown.get(id);
 
                 if (time > 0) {
-
-                    player.sendMessage(
-                            Text.literal("Teleporting in " + time),
-                            true
-                    );
-
+                    player.sendMessage(Text.literal("Teleporting in " + time), true);
                     countdown.put(id, time - 1);
                     continue;
                 }
 
-                boolean mine =
-                        mineTeleport.getOrDefault(id, false);
+                boolean mine = mineTeleport.getOrDefault(id, false);
+                boolean exit = exitTeleport.getOrDefault(id, false);
+                boolean stronger = strongerTeleport.getOrDefault(id, false);
+                boolean love = loveTeleport.getOrDefault(id, false);
+                boolean parkour = parkourTeleport.getOrDefault(id, false);
+                boolean speedrun = speedrunTeleport.getOrDefault(id, false);
 
                 ServerWorld target;
 
-                if (mine) {
+                if (speedrun) {
+                    target = server.getWorld(ModDimensions.SPEEDRUN_DIMENSION);
+
+                } else if (parkour) {
+                    target = server.getWorld(ModDimensions.PARKOUR_DIMENSION);
+
+                } else if (mine) {
                     target = server.getWorld(ModDimensions.MINE_DIMENSION);
+
+                } else if (exit) {
+                    target = server.getWorld(ModDimensions.EXIT_DIMENSION);
+
+                } else if (stronger) {
+                    target = server.getWorld(ModDimensions.STRONGER_DIMENSION);
+
+                } else if (love) {
+                    target = server.getWorld(ModDimensions.LOVE_DIMENSION);
+
                 } else {
                     target = server.getOverworld();
                 }
 
                 if (target == null) {
-                    countdown.remove(id);
-                    timer.remove(id);
-                    mineTeleport.remove(id);
+                    cleanup(id);
                     WarpState.stop(id);
                     continue;
                 }
 
-                BlockPos safe = new BlockPos(0, 90, 0);
-
-                createSafeArea(target, safe);
-
                 player.teleport(
                         target,
-                        safe.getX() + 0.5,
-                        safe.getY(),
-                        safe.getZ() + 0.5,
+                        0.5,
+                        90,
+                        0.5,
                         player.getYaw(),
                         player.getPitch()
                 );
 
-                countdown.remove(id);
-                timer.remove(id);
-                mineTeleport.remove(id);
-
+                cleanup(id);
                 WarpState.stop(id);
 
-                player.sendMessage(
-                        Text.literal(
-                                mine
-                                        ? "Teleported to Mine Dimension"
-                                        : "Teleported to Overworld"
-                        ),
-                        true
-                );
+                player.sendMessage(Text.literal("Teleported!"), true);
             }
         });
     }
 
-    private static void createSafeArea(
-            ServerWorld world,
-            BlockPos center
-    ) {
+    private static void cleanup(UUID id) {
 
-        int x = center.getX();
-        int y = center.getY();
-        int z = center.getZ();
+        countdown.remove(id);
+        timer.remove(id);
 
-        world.setBlockState(
-                new BlockPos(x, y - 1, z),
-                Blocks.COBBLESTONE.getDefaultState()
-        );
-
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                for (int dy = 0; dy <= 2; dy++) {
-
-                    world.setBlockState(
-                            new BlockPos(x + dx, y + dy, z + dz),
-                            Blocks.AIR.getDefaultState()
-                    );
-                }
-            }
-        }
+        mineTeleport.remove(id);
+        exitTeleport.remove(id);
+        strongerTeleport.remove(id);
+        loveTeleport.remove(id);
+        parkourTeleport.remove(id);
+        speedrunTeleport.remove(id);
     }
 }

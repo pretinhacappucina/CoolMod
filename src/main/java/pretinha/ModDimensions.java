@@ -10,12 +10,37 @@ public class ModDimensions {
     public static final RegistryKey<World> DIMENSIONAL_BARRIERS =
             RegistryKey.of(
                     RegistryKeys.WORLD,
-                    Identifier.of("coolmod", "dimensional_barriers")
+                    Identifier.of(Coolmod.MOD_ID, "dimensional_barriers")
             );
+    public static final RegistryKey<World> LOVE_DIMENSION =
+            RegistryKey.of(RegistryKeys.WORLD, Identifier.of("coolmod", "love_dimension"));
 
     public static final RegistryKey<World> MINE_DIMENSION =
             RegistryKey.of(
                     RegistryKeys.WORLD,
-                    Identifier.of("coolmod", "mine_dimension")
+                    Identifier.of(Coolmod.MOD_ID, "mine_dimension")
+            );
+    public static final RegistryKey<World> STRONGER_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of("coolmod", "stronger_dimension")
+            );
+    public static final RegistryKey<World> PARKOUR_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of("coolmod", "parkour_dimension")
+            );
+    public static final RegistryKey<World> SPEEDRUN_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of("coolmod", "speedrun_dimension")
+            );
+
+    public static final RegistryKey<World> EXIT_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of(Coolmod.MOD_ID, "exit_dimension")
+
+
             );
 }

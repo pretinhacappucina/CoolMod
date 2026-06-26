@@ -1,0 +1,17 @@
+{
+  "type": "coolmod:exit_dimension_type",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:the_end",
+      "lakes": true,
+      "features": true,
+      "layers": [
+        {
+          "block": "coolmod:exit_dimensioner",
+          "height": 1
+        }
+      ]
+    }
+  }
+}

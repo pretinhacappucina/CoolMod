@@ -29,5 +29,6 @@
   "block.coolmod.dimensional_bedrock": "Dimensional Bedrock",
   "item.coolmod.fragments_of_exit": "Fragments of Exit",
   "item.coolmod.exit_hammer": "Exit Hammer",
-  "item.coolmod.overworld_reactiver": "Overworld Reactiver"
+  "item.coolmod.overworld_reactiver": "Overworld Reactiver",
+  "item.coolmod.exit_reactiver": "Exit Reactiver"
 }
