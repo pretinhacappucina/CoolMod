@@ -4,7 +4,7 @@ CoolMod is a Minecraft Fabric mod for Minecraft 1.21.1.
 
 ## License
 
-Copyright © 2026 HUGH.@ Silv@.
+Copyright © 2026 CappuCode
 
 All rights reserved.
 
