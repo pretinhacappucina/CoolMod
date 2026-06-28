@@ -1,9 +1,11 @@
-# coolmod
+# CoolMod
 
-## Setup
-
-For setup instructions, please see the [Fabric Documentation page](https://docs.fabricmc.net/develop/getting-started/creating-a-project#setting-up) related to the IDE that you are using.
+CoolMod is a Minecraft Fabric mod for Minecraft 1.21.1.
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+Copyright © 2026 HUGH.@ Silv@.
+
+All rights reserved.
+
+This project and its source code may not be copied, modified, redistributed, or used, in whole or in part, without the express written permission of the copyright holder.
