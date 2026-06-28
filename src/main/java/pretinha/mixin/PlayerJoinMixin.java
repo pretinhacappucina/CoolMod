@@ -39,7 +39,7 @@ public class PlayerJoinMixin {
         MiningManager.create(player.getUuid());
 
         // SPAWN FIXO
-        BlockPos spawn = new BlockPos(0, 90, 0);
+        BlockPos spawn = new BlockPos(25, 115, 16);
 
         player.teleport(
                 world,

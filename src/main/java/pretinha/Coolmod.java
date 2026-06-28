@@ -32,6 +32,12 @@ public class Coolmod implements ModInitializer {
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
 
+            // Chamado todo tick do servidor. Dentro de trySpawn() há checagens
+            // de null, de dimensão e de estado persistente, então é seguro
+            // chamar isso a cada tick — ele só vai realmente colocar a
+            // estrutura uma única vez.
+            MotherBarrierSpawner.trySpawn(server.getWorld(ModDimensions.DIMENSIONAL_BARRIERS));
+
             server.getPlayerManager().getPlayerList().forEach(player -> {
 
                 if (FallDamageManager.has(player.getUuid())) {
@@ -102,7 +108,6 @@ public class Coolmod implements ModInitializer {
                 ExitHammerItem.tick(player);
 
             });
-
 
         });
 
