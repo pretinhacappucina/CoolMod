@@ -9,6 +9,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -43,7 +46,14 @@ public class DimensionalFirefliesBlock extends Block {
         if (!player.isCreative()) {
             stack.decrement(1);
         }
-
+        world.playSound(
+                null,
+                pos,
+                SoundEvents.BLOCK_AMETHYST_CLUSTER_BREAK,
+                SoundCategory.BLOCKS,
+                1.0F,
+                1.2F
+        );
         Queue<BlockPos> queue = new LinkedList<>();
         Set<BlockPos> visited = new HashSet<>();
 

@@ -35,7 +35,11 @@ public class ModDimensions {
                     RegistryKeys.WORLD,
                     Identifier.of("coolmod", "speedrun_dimension")
             );
-
+    public static final RegistryKey<World> SKY_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of(Coolmod.MOD_ID, "sky_dimension")
+            );
     public static final RegistryKey<World> EXIT_DIMENSION =
             RegistryKey.of(
                     RegistryKeys.WORLD,

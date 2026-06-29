@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
@@ -62,7 +63,10 @@ public class ExitDimensionerBlock extends Block {
 
         if (time > 0) {
 
-            player.sendMessage(Text.literal("Teleporting in " + time), true);
+            player.sendMessage(
+                    Text.literal("Teleporting in " + time),
+                    true
+            );
 
             COUNTDOWN.put(id, time - 1);
             return;
@@ -71,8 +75,7 @@ public class ExitDimensionerBlock extends Block {
         COUNTDOWN.remove(id);
         TIMER.remove(id);
 
-        ServerWorld target =
-                player.getServer().getWorld(ModDimensions.DIMENSIONAL_BARRIERS);
+        ServerWorld target = player.getServer().getWorld(ModDimensions.DIMENSIONAL_BARRIERS);
 
         if (target == null) {
             WarpState.stop(id);
@@ -81,15 +84,25 @@ public class ExitDimensionerBlock extends Block {
 
         player.teleport(
                 target,
-                0.5,
-                90,
-                0.5,
+                25,
+                115,
+                16,
                 player.getYaw(),
                 player.getPitch()
         );
 
+        player.playSound(
+                SoundEvents.BLOCK_PORTAL_TRAVEL,
+                1.0F,
+                1.0F
+        );
+
         WarpState.stop(id);
 
-        player.sendMessage(Text.literal("Teleported!").formatted(Formatting.GREEN, Formatting.BOLD), true);
+        player.sendMessage(
+                Text.literal("Teleported!")
+                        .formatted(Formatting.GREEN, Formatting.BOLD),
+                true
+        );
     }
 }

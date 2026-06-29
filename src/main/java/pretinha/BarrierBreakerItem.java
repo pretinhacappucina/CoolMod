@@ -13,6 +13,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -80,7 +82,14 @@ public class BarrierBreakerItem extends PickaxeItem {
                 pos.getZ() + 0.5,
                 drop
         ));
-
+        serverWorld.playSound(
+                null,
+                pos,
+                SoundEvents.ENTITY_ENDER_PEARL_THROW,
+                SoundCategory.BLOCKS,
+                1.0F,
+                2.2F
+        );
         // 🔧 durabilidade
         player.getMainHandStack().damage(DURABILITY_COST, player, null);
 

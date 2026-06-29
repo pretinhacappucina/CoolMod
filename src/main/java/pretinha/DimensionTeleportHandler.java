@@ -7,9 +7,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class DimensionTeleportHandler {
 
@@ -22,6 +23,7 @@ public class DimensionTeleportHandler {
     private static final HashMap<UUID, Boolean> loveTeleport = new HashMap<>();
     private static final HashMap<UUID, Boolean> parkourTeleport = new HashMap<>();
     private static final HashMap<UUID, Boolean> speedrunTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> randomTeleport = new HashMap<>();
 
     public static void register() {
 
@@ -39,7 +41,8 @@ public class DimensionTeleportHandler {
                             item.getItem() == ModItems.STRONGER_REACTIVER ||
                             item.getItem() == ModItems.REGENERATION_REACTIVER ||
                             item.getItem() == ModItems.PARKOUR_REACTIVER ||
-                            item.getItem() == ModItems.SPEEDRUN_REACTIVER;
+                            item.getItem() == ModItems.SPEEDRUN_REACTIVER ||
+                            item.getItem() == ModItems.RANDOM_REACTIVER;
 
             if (!valid) return TypedActionResult.pass(item);
 
@@ -56,9 +59,18 @@ public class DimensionTeleportHandler {
             loveTeleport.put(id, item.getItem() == ModItems.REGENERATION_REACTIVER);
             parkourTeleport.put(id, item.getItem() == ModItems.PARKOUR_REACTIVER);
             speedrunTeleport.put(id, item.getItem() == ModItems.SPEEDRUN_REACTIVER);
+            randomTeleport.put(id, item.getItem() == ModItems.RANDOM_REACTIVER);
 
-            // 🔥 ISSO AQUI FAZ O ITEM SER CONSUMIDO DE VERDADE
             item.decrement(1);
+
+            sp.getWorld().playSound(
+                    null,
+                    sp.getBlockPos(),
+                    SoundEvents.BLOCK_END_PORTAL_SPAWN,
+                    SoundCategory.PLAYERS,
+                    1.0F,
+                    1.0F
+            );
 
             return TypedActionResult.success(item);
         });
@@ -91,10 +103,25 @@ public class DimensionTeleportHandler {
                 boolean love = loveTeleport.getOrDefault(id, false);
                 boolean parkour = parkourTeleport.getOrDefault(id, false);
                 boolean speedrun = speedrunTeleport.getOrDefault(id, false);
+                boolean random = randomTeleport.getOrDefault(id, false);
 
                 ServerWorld target;
 
-                if (speedrun) {
+                if (random) {
+
+                    List<ServerWorld> worlds = new ArrayList<>();
+
+                    server.getWorlds().forEach(worlds::add);
+
+                    if (worlds.isEmpty()) {
+                        cleanup(id);
+                        WarpState.stop(id);
+                        continue;
+                    }
+
+                    target = worlds.get(new Random().nextInt(worlds.size()));
+
+                } else if (speedrun) {
                     target = server.getWorld(ModDimensions.SPEEDRUN_DIMENSION);
 
                 } else if (parkour) {
@@ -150,5 +177,6 @@ public class DimensionTeleportHandler {
         loveTeleport.remove(id);
         parkourTeleport.remove(id);
         speedrunTeleport.remove(id);
+        randomTeleport.remove(id);
     }
 }

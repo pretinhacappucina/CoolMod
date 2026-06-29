@@ -10,6 +10,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -79,12 +81,19 @@ public class ExitHammerItem extends Item {
             WarpState.stop(id);
             return;
         }
-
+        player.getWorld().playSound(
+                null,
+                player.getBlockPos(),
+                SoundEvents.BLOCK_PORTAL_TRAVEL,
+                SoundCategory.PLAYERS,
+                1.0F,
+                1.0F
+        );
         player.teleport(
                 target,
-                0.5,
-                90,
-                0.5,
+                25,
+                115,
+                16,
                 player.getYaw(),
                 player.getPitch()
         );
