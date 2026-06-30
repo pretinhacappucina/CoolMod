@@ -1,28 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "WDT",
-    " SL",
-    " Y "
+    " D ",
+    "DLD",
+    " D "
   ],
   "key": {
-    "W": {
-      "item": "minecraft:water_bucket"
-    },
     "D": {
-      "item": "minecraft:dirt"
-    },
-    "T": {
       "item": "minecraft:diamond"
     },
-    "S": {
-      "item": "minecraft:wheat_seeds"
-    },
     "L": {
-      "item": "minecraft:lapis_lazuli"
-    },
-    "Y": {
-      "item": "minecraft:yellow_wool"
+      "item": "minecraft:lapis_block"
     }
   },
   "result": {

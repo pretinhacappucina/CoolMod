@@ -1,0 +1,28 @@
+{
+  "type": "coolmod:tnt_dimension_type",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "structures": {
+        "structures": {}
+      },
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 1
+        },
+        {
+          "block": "minecraft:tnt",
+          "height": 64
+        },
+        {
+          "block": "minecraft:stone_pressure_plate",
+          "height": 1
+        }
+      ],
+      "biome": "minecraft:plains",
+      "lakes": false,
+      "features": true
+    }
+  }
+}

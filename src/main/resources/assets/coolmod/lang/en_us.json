@@ -31,5 +31,12 @@
   "item.coolmod.exit_hammer": "Exit Hammer",
   "item.coolmod.overworld_reactiver": "Overworld Reactiver",
   "item.coolmod.exit_reactiver": "Exit Reactiver",
-  "item.coolmod.random_reactiver": "Random Reactiver"
+  "item.coolmod.random_reactiver": "Random Reactiver",
+  "item.coolmod.mountains_reactiver": "Mountains Reactiver",
+  "item.coolmod.sculk_reactiver": "Sculk Reactiver",
+  "item.coolmod.lush_reactivator": "Lush Reactivator",
+  "item.coolmod.water_reactiver": "Water Reactiver",
+  "item.coolmod.lava_reactivator": "Lava Reactiver",
+  "item.coolmod.tnt_reactivator": "TNT Reactiver",
+  "item.coolmod.desert_reactiver": "Desert Reactiver"
 }

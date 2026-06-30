@@ -42,6 +42,19 @@ public class ModItems {
 
     public static final Item RANDOM_REACTIVER =
             register("random_reactiver");
+    public static final Item MOUNTAINS_REACTIVER = register("mountains_reactiver");
+    public static final Item SCULK_REACTIVER =
+            register("sculk_reactiver");
+    public static final Item LUSH_REACTIVATOR =
+            register("lush_reactivator");
+    public static final Item WATER_REACTIVER =
+            register("water_reactiver");
+    public static final Item LAVA_REACTIVER =
+            register("lava_reactivator");
+    public static final Item TNT_REACTIVER =
+            register("tnt_reactivator");
+    public static final Item DESERT_REACTIVER =
+            register("desert_reactiver");
 
     public static final Item EXIT_HAMMER =
             Registry.register(
@@ -92,6 +105,13 @@ public class ModItems {
                     entries.add(OVERWORLD_REACTIVER);
                     entries.add(EXIT_REACTIVER);
                     entries.add(RANDOM_REACTIVER);
+                    entries.add(MOUNTAINS_REACTIVER);
+                    entries.add(SCULK_REACTIVER);
+                    entries.add(LUSH_REACTIVATOR);
+                    entries.add(WATER_REACTIVER);
+                    entries.add(LAVA_REACTIVER);
+                    entries.add(TNT_REACTIVER);
+                    entries.add(DESERT_REACTIVER);
                 });
 
         Coolmod.LOGGER.info("Items registrados");

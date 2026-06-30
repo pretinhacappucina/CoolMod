@@ -1,14 +1,17 @@
 package pretinha;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 
@@ -17,34 +20,44 @@ public class DimensionTeleportHandler {
     private static final HashMap<UUID, Integer> countdown = new HashMap<>();
     private static final HashMap<UUID, Long> timer = new HashMap<>();
 
-    private static final HashMap<UUID, Boolean> mineTeleport = new HashMap<>();
-    private static final HashMap<UUID, Boolean> exitTeleport = new HashMap<>();
-    private static final HashMap<UUID, Boolean> strongerTeleport = new HashMap<>();
-    private static final HashMap<UUID, Boolean> loveTeleport = new HashMap<>();
-    private static final HashMap<UUID, Boolean> parkourTeleport = new HashMap<>();
-    private static final HashMap<UUID, Boolean> speedrunTeleport = new HashMap<>();
     private static final HashMap<UUID, Boolean> randomTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> mountainsTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> sculkTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> lushTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> waterTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> lavaTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> tntTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> desertTeleport = new HashMap<>();
 
     public static void register() {
 
-        UseItemCallback.EVENT.register((player, world, hand) -> {
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 
-            if (world.isClient()) return TypedActionResult.pass(player.getStackInHand(hand));
-            if (!(player instanceof ServerPlayerEntity sp)) return TypedActionResult.pass(player.getStackInHand(hand));
+            if (world.isClient())
+                return ActionResult.PASS;
+
+            if (!(player instanceof ServerPlayerEntity sp))
+                return ActionResult.PASS;
+
+            // só ativa se o bloco clicado for o Dimensions Teleporter
+            if (world.getBlockState(hitResult.getBlockPos()).getBlock() != ModBlocks.DIMENSIONS_TELEPORTER)
+                return ActionResult.PASS;
 
             ItemStack item = sp.getStackInHand(hand);
 
             boolean valid =
-                    item.getItem() == ModItems.OVERWORLD_REACTIVER ||
-                            item.getItem() == ModItems.MINER_REACTIVER ||
-                            item.getItem() == ModItems.EXIT_REACTIVER ||
-                            item.getItem() == ModItems.STRONGER_REACTIVER ||
-                            item.getItem() == ModItems.REGENERATION_REACTIVER ||
-                            item.getItem() == ModItems.PARKOUR_REACTIVER ||
-                            item.getItem() == ModItems.SPEEDRUN_REACTIVER ||
-                            item.getItem() == ModItems.RANDOM_REACTIVER;
+                    item.getItem() == ModItems.RANDOM_REACTIVER ||
+                            item.getItem() == ModItems.MOUNTAINS_REACTIVER ||
+                            item.getItem() == ModItems.SCULK_REACTIVER ||
+                            item.getItem() == ModItems.LUSH_REACTIVATOR ||
+                            item.getItem() == ModItems.WATER_REACTIVER ||
+                            item.getItem() == ModItems.LAVA_REACTIVER ||
+                            item.getItem() == ModItems.DESERT_REACTIVER ||
+                            item.getItem() == ModItems.TNT_REACTIVER;
 
-            if (!valid) return TypedActionResult.pass(item);
+
+            if (!valid)
+                return ActionResult.PASS;
 
             UUID id = sp.getUuid();
 
@@ -53,13 +66,14 @@ public class DimensionTeleportHandler {
             countdown.put(id, 3);
             timer.put(id, System.currentTimeMillis());
 
-            mineTeleport.put(id, item.getItem() == ModItems.MINER_REACTIVER);
-            exitTeleport.put(id, item.getItem() == ModItems.EXIT_REACTIVER);
-            strongerTeleport.put(id, item.getItem() == ModItems.STRONGER_REACTIVER);
-            loveTeleport.put(id, item.getItem() == ModItems.REGENERATION_REACTIVER);
-            parkourTeleport.put(id, item.getItem() == ModItems.PARKOUR_REACTIVER);
-            speedrunTeleport.put(id, item.getItem() == ModItems.SPEEDRUN_REACTIVER);
             randomTeleport.put(id, item.getItem() == ModItems.RANDOM_REACTIVER);
+            mountainsTeleport.put(id, item.getItem() == ModItems.MOUNTAINS_REACTIVER);
+            sculkTeleport.put(id, item.getItem() == ModItems.SCULK_REACTIVER);
+            lushTeleport.put(id, item.getItem() == ModItems.LUSH_REACTIVATOR);
+            waterTeleport.put(id, item.getItem() == ModItems.WATER_REACTIVER);
+            lavaTeleport.put(id, item.getItem() == ModItems.LAVA_REACTIVER);
+            tntTeleport.put(id, item.getItem() == ModItems.TNT_REACTIVER);
+            desertTeleport.put(id, item.getItem() == ModItems.DESERT_REACTIVER);
 
             item.decrement(1);
 
@@ -72,7 +86,7 @@ public class DimensionTeleportHandler {
                     1.0F
             );
 
-            return TypedActionResult.success(item);
+            return ActionResult.SUCCESS;
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
@@ -81,65 +95,78 @@ public class DimensionTeleportHandler {
 
                 UUID id = player.getUuid();
 
-                if (!countdown.containsKey(id)) continue;
+                if (!countdown.containsKey(id))
+                    continue;
 
                 long now = System.currentTimeMillis();
 
-                if (now - timer.get(id) < 1000) continue;
+                if (now - timer.get(id) < 1000)
+                    continue;
 
                 timer.put(id, now);
 
                 int time = countdown.get(id);
 
                 if (time > 0) {
-                    player.sendMessage(Text.literal("Teleporting in " + time), true);
+
+                    player.sendMessage(
+                            Text.literal("Teleporting in " + time),
+                            true
+                    );
+
                     countdown.put(id, time - 1);
                     continue;
                 }
 
-                boolean mine = mineTeleport.getOrDefault(id, false);
-                boolean exit = exitTeleport.getOrDefault(id, false);
-                boolean stronger = strongerTeleport.getOrDefault(id, false);
-                boolean love = loveTeleport.getOrDefault(id, false);
-                boolean parkour = parkourTeleport.getOrDefault(id, false);
-                boolean speedrun = speedrunTeleport.getOrDefault(id, false);
                 boolean random = randomTeleport.getOrDefault(id, false);
-
+                boolean mountains = mountainsTeleport.getOrDefault(id, false);
+                boolean sculk = sculkTeleport.getOrDefault(id, false);
+                boolean lush = lushTeleport.getOrDefault(id, false);
+                boolean water = waterTeleport.getOrDefault(id, false);
+                boolean lava = lavaTeleport.getOrDefault(id, false);
+                boolean tnt = tntTeleport.getOrDefault(id, false);
+                boolean desert = desertTeleport.getOrDefault(id, false);
                 ServerWorld target;
 
-                if (random) {
+                if (tnt) {
+
+                    target = server.getWorld(ModDimensions.TNT_DIMENSION);
+
+                } else if (lava) {
+
+                    target = server.getWorld(ModDimensions.LAVA_DIMENSION);
+
+                }
+                else if (desert) {
+
+                    target = server.getWorld(ModDimensions.DESERT_DIMENSION);
+
+                }
+                else if (water) {
+
+                    target = server.getWorld(ModDimensions.WATER_DIMENSION);
+
+                } else if (lush) {
+
+                    target = server.getWorld(ModDimensions.LUSH_DIMENSION);
+
+                } else if (sculk) {
+
+                    target = server.getWorld(ModDimensions.SCULK_DIMENSION);
+
+                } else if (mountains) {
+
+                    target = server.getWorld(ModDimensions.SKY_DIMENSION);
+
+                } else if (random) {
 
                     List<ServerWorld> worlds = new ArrayList<>();
-
                     server.getWorlds().forEach(worlds::add);
-
-                    if (worlds.isEmpty()) {
-                        cleanup(id);
-                        WarpState.stop(id);
-                        continue;
-                    }
 
                     target = worlds.get(new Random().nextInt(worlds.size()));
 
-                } else if (speedrun) {
-                    target = server.getWorld(ModDimensions.SPEEDRUN_DIMENSION);
-
-                } else if (parkour) {
-                    target = server.getWorld(ModDimensions.PARKOUR_DIMENSION);
-
-                } else if (mine) {
-                    target = server.getWorld(ModDimensions.MINE_DIMENSION);
-
-                } else if (exit) {
-                    target = server.getWorld(ModDimensions.EXIT_DIMENSION);
-
-                } else if (stronger) {
-                    target = server.getWorld(ModDimensions.STRONGER_DIMENSION);
-
-                } else if (love) {
-                    target = server.getWorld(ModDimensions.LOVE_DIMENSION);
-
                 } else {
+
                     target = server.getOverworld();
                 }
 
@@ -151,17 +178,38 @@ public class DimensionTeleportHandler {
 
                 player.teleport(
                         target,
-                        0.5,
-                        90,
-                        0.5,
+                        25,
+                        115,
+                        16,
                         player.getYaw(),
                         player.getPitch()
                 );
+                BlockPos center = player.getBlockPos();
 
+
+                for (int x = -1; x <= 1; x++) {
+                    for (int z = -1; z <= 1; z++) {
+                        target.setBlockState(
+                                center.add(x, -1, z),
+                                Blocks.STONE.getDefaultState(),
+                                3
+                        );
+                    }
+                }
+
+
+                target.setBlockState(
+                        center.down(),
+                        Blocks.WATER.getDefaultState(),
+                        3
+                );
                 cleanup(id);
                 WarpState.stop(id);
 
-                player.sendMessage(Text.literal("Teleported!"), true);
+                player.sendMessage(
+                        Text.literal("Teleported!"),
+                        true
+                );
             }
         });
     }
@@ -171,12 +219,13 @@ public class DimensionTeleportHandler {
         countdown.remove(id);
         timer.remove(id);
 
-        mineTeleport.remove(id);
-        exitTeleport.remove(id);
-        strongerTeleport.remove(id);
-        loveTeleport.remove(id);
-        parkourTeleport.remove(id);
-        speedrunTeleport.remove(id);
         randomTeleport.remove(id);
+        mountainsTeleport.remove(id);
+        sculkTeleport.remove(id);
+        lushTeleport.remove(id);
+        waterTeleport.remove(id);
+        lavaTeleport.remove(id);
+        tntTeleport.remove(id);
+        desertTeleport.remove(id);
     }
 }

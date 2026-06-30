@@ -5,7 +5,7 @@
     "settings": "minecraft:amplified",
     "biome_source": {
       "type": "minecraft:fixed",
-      "biome": "minecraft:plains"
+      "biome": "minecraft:jagged_peaks"
     }
   }
 }

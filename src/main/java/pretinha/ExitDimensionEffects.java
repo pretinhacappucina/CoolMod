@@ -13,13 +13,14 @@ public class ExitDimensionEffects {
 
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
 
-                if (player.getWorld().getRegistryKey().equals(ModDimensions.EXIT_DIMENSION)) {
+                if (player.getWorld().getRegistryKey().equals(ModDimensions.EXIT_DIMENSION)
+                        || player.getWorld().getRegistryKey().equals(ModDimensions.SCULK_DIMENSION)) {
 
                     player.addStatusEffect(
                             new StatusEffectInstance(
                                     StatusEffects.DARKNESS,
                                     40,
-                                    9,
+                                    2, // 👈 level 3 de escuridão (0 = level 1)
                                     true,
                                     false,
                                     false
@@ -29,7 +30,6 @@ public class ExitDimensionEffects {
                 } else {
 
                     player.removeStatusEffect(StatusEffects.DARKNESS);
-
                 }
             }
 

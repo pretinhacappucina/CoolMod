@@ -40,10 +40,42 @@ public class ModDimensions {
                     RegistryKeys.WORLD,
                     Identifier.of(Coolmod.MOD_ID, "sky_dimension")
             );
+    public static final RegistryKey<World> SCULK_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of(Coolmod.MOD_ID, "sculk_dimension")
+
+            );
+    public static final RegistryKey<World> LUSH_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of(Coolmod.MOD_ID, "lush_dimension")
+            );
+    public static final RegistryKey<World> WATER_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of(Coolmod.MOD_ID, "water_dimension")
+            );
+    public static final RegistryKey<World> LAVA_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of(Coolmod.MOD_ID, "lava_dimension")
+            );
+    public static final RegistryKey<World> TNT_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of(Coolmod.MOD_ID, "tnt_dimension")
+            );
+    public static final RegistryKey<World> DESERT_DIMENSION =
+            RegistryKey.of(
+                    RegistryKeys.WORLD,
+                    Identifier.of(Coolmod.MOD_ID, "desert_dimension")
+            );
     public static final RegistryKey<World> EXIT_DIMENSION =
             RegistryKey.of(
                     RegistryKeys.WORLD,
                     Identifier.of(Coolmod.MOD_ID, "exit_dimension")
+
 
 
             );
