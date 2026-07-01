@@ -2,8 +2,11 @@ package pretinha;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +32,19 @@ public class Coolmod implements ModInitializer {
         ParkourIslandGen.register();
         ParkourDimensionEffects.register();
         SpeedrunDimensionEffects.register();
+        DeathRewardHandler.register();
+
+        // Entrega os itens iniciais na primeira vez que o jogador entra no mundo
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            ServerPlayerEntity player = handler.getPlayer();
+
+            if (!player.getCommandTags().contains("coolmod_starter_given")) {
+                player.getInventory().offerOrDrop(new ItemStack(ModItems.RANDOM_REACTIVER, 2));
+                player.addCommandTag("coolmod_starter_given");
+
+                LOGGER.info("Jogador {} recebeu os itens iniciais do Coolmod.", player.getName().getString());
+            }
+        });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
 

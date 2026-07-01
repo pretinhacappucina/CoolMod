@@ -1,0 +1,59 @@
+
+
+{
+
+  "type": "minecraft:crafting_shaped",
+
+  "pattern": [
+
+    "N D",
+
+    " X ",
+
+    "G E"
+
+  ],
+
+  "key": {
+
+    "N": {
+
+      "item": "minecraft:netherite_ingot"
+
+    },
+
+    "D": {
+
+      "item": "minecraft:diamond"
+
+    },
+
+    "X": {
+
+      "item": "coolmod:exit_dimensioner"
+
+    },
+
+    "G": {
+
+      "item": "minecraft:gold_ingot"
+
+    },
+
+    "E": {
+
+      "item": "minecraft:emerald"
+
+    }
+
+  },
+
+  "result": {
+
+    "id": "coolmod:dimensional_dust",
+
+    "count": 1
+
+  }
+
+}

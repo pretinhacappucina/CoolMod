@@ -29,6 +29,14 @@ public class DimensionTeleportHandler {
     private static final HashMap<UUID, Boolean> tntTeleport = new HashMap<>();
     private static final HashMap<UUID, Boolean> desertTeleport = new HashMap<>();
 
+    // Novos reactivers
+    private static final HashMap<UUID, Boolean> regenerationTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> minerTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> strongerTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> parkourTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> speedrunTeleport = new HashMap<>();
+    private static final HashMap<UUID, Boolean> overworldTeleport = new HashMap<>();
+
     public static void register() {
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
@@ -53,7 +61,13 @@ public class DimensionTeleportHandler {
                             item.getItem() == ModItems.WATER_REACTIVER ||
                             item.getItem() == ModItems.LAVA_REACTIVER ||
                             item.getItem() == ModItems.DESERT_REACTIVER ||
-                            item.getItem() == ModItems.TNT_REACTIVER;
+                            item.getItem() == ModItems.TNT_REACTIVER ||
+                            item.getItem() == ModItems.REGENERATION_REACTIVER ||
+                            item.getItem() == ModItems.MINER_REACTIVER ||
+                            item.getItem() == ModItems.STRONGER_REACTIVER ||
+                            item.getItem() == ModItems.PARKOUR_REACTIVER ||
+                            item.getItem() == ModItems.SPEEDRUN_REACTIVER ||
+                            item.getItem() == ModItems.OVERWORLD_REACTIVER;
 
 
             if (!valid)
@@ -74,6 +88,13 @@ public class DimensionTeleportHandler {
             lavaTeleport.put(id, item.getItem() == ModItems.LAVA_REACTIVER);
             tntTeleport.put(id, item.getItem() == ModItems.TNT_REACTIVER);
             desertTeleport.put(id, item.getItem() == ModItems.DESERT_REACTIVER);
+
+            regenerationTeleport.put(id, item.getItem() == ModItems.REGENERATION_REACTIVER);
+            minerTeleport.put(id, item.getItem() == ModItems.MINER_REACTIVER);
+            strongerTeleport.put(id, item.getItem() == ModItems.STRONGER_REACTIVER);
+            parkourTeleport.put(id, item.getItem() == ModItems.PARKOUR_REACTIVER);
+            speedrunTeleport.put(id, item.getItem() == ModItems.SPEEDRUN_REACTIVER);
+            overworldTeleport.put(id, item.getItem() == ModItems.OVERWORLD_REACTIVER);
 
             item.decrement(1);
 
@@ -126,6 +147,14 @@ public class DimensionTeleportHandler {
                 boolean lava = lavaTeleport.getOrDefault(id, false);
                 boolean tnt = tntTeleport.getOrDefault(id, false);
                 boolean desert = desertTeleport.getOrDefault(id, false);
+
+                boolean regeneration = regenerationTeleport.getOrDefault(id, false);
+                boolean miner = minerTeleport.getOrDefault(id, false);
+                boolean stronger = strongerTeleport.getOrDefault(id, false);
+                boolean parkour = parkourTeleport.getOrDefault(id, false);
+                boolean speedrun = speedrunTeleport.getOrDefault(id, false);
+                boolean overworld = overworldTeleport.getOrDefault(id, false);
+
                 ServerWorld target;
 
                 if (tnt) {
@@ -136,13 +165,11 @@ public class DimensionTeleportHandler {
 
                     target = server.getWorld(ModDimensions.LAVA_DIMENSION);
 
-                }
-                else if (desert) {
+                } else if (desert) {
 
                     target = server.getWorld(ModDimensions.DESERT_DIMENSION);
 
-                }
-                else if (water) {
+                } else if (water) {
 
                     target = server.getWorld(ModDimensions.WATER_DIMENSION);
 
@@ -157,6 +184,30 @@ public class DimensionTeleportHandler {
                 } else if (mountains) {
 
                     target = server.getWorld(ModDimensions.SKY_DIMENSION);
+
+                } else if (regeneration) {
+
+                    target = server.getWorld(ModDimensions.LOVE_DIMENSION);
+
+                } else if (miner) {
+
+                    target = server.getWorld(ModDimensions.MINE_DIMENSION);
+
+                } else if (stronger) {
+
+                    target = server.getWorld(ModDimensions.STRONGER_DIMENSION);
+
+                } else if (parkour) {
+
+                    target = server.getWorld(ModDimensions.PARKOUR_DIMENSION);
+
+                } else if (speedrun) {
+
+                    target = server.getWorld(ModDimensions.SPEEDRUN_DIMENSION);
+
+                } else if (overworld) {
+
+                    target = server.getOverworld();
 
                 } else if (random) {
 
@@ -176,11 +227,28 @@ public class DimensionTeleportHandler {
                     continue;
                 }
 
+                BlockPos destination = new BlockPos(25, 115, 16);
+
+                // Limpa uma área 3x3 de ar, com 3 blocos de altura, no destino,
+                // pra garantir que o jogador não sufoque nem tenha problema
+                // ao chegar (mesmo se o chunk já tiver blocos gerados ali).
+                for (int x = -1; x <= 1; x++) {
+                    for (int z = -1; z <= 1; z++) {
+                        for (int y = 0; y <= 2; y++) {
+                            target.setBlockState(
+                                    destination.add(x, y, z),
+                                    Blocks.AIR.getDefaultState(),
+                                    3
+                            );
+                        }
+                    }
+                }
+
                 player.teleport(
                         target,
-                        25,
-                        115,
-                        16,
+                        destination.getX(),
+                        destination.getY(),
+                        destination.getZ(),
                         player.getYaw(),
                         player.getPitch()
                 );
@@ -227,5 +295,12 @@ public class DimensionTeleportHandler {
         lavaTeleport.remove(id);
         tntTeleport.remove(id);
         desertTeleport.remove(id);
+
+        regenerationTeleport.remove(id);
+        minerTeleport.remove(id);
+        strongerTeleport.remove(id);
+        parkourTeleport.remove(id);
+        speedrunTeleport.remove(id);
+        overworldTeleport.remove(id);
     }
 }

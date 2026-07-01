@@ -3,8 +3,8 @@
 	"id": "coolmod",
 	"version": "${version}",
 	"name": "coolmod",
-	"description": "Void dimension mod",
-	"authors": ["Me!"],
+	"description": "CraftMine Reimagined",
+	"authors": ["CappuCode"],
 	"environment": "*",
 	"entrypoints": {
 		"main": ["pretinha.Coolmod"],
